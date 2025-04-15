@@ -1,7 +1,7 @@
 import scala.annotation.tailrec
 
 object ProteinTranslation:
-   val pMap: Map[Seq[String], String] = Map(
+   private val pMap: Map[Seq[String], String] = Map(
      Seq("AUG") -> "Methionine",
      Seq("UUU", "UUC") -> "Phenylalanine",
      Seq("UUA", "UUG") -> "Leucine",
@@ -15,9 +15,9 @@ object ProteinTranslation:
       @tailrec
       def loop(cs: Seq[String], proteins: Seq[String]): Seq[String] =
          cs match
-            case Nil                                                    => proteins.reverse
-            case ::(head, _) if Seq("UAA", "UAG", "UGA").contains(head) => proteins.reverse
-            case ::(head, tail)                                         =>
+            case Nil                                        => proteins.reverse
+            case ::(head, _) if pMap.last._1.contains(head) => proteins.reverse
+            case ::(head, tail)                             =>
                loop(tail, proteins.prepended(pMap.find(_._1.contains(head)).map(_._2).getOrElse("")))
 
       loop(s.grouped(3).toSeq, Nil)
