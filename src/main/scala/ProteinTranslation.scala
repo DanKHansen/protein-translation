@@ -12,8 +12,6 @@ object ProteinTranslation:
      Seq("UAA", "UAG", "UGA") -> "STOP"
    )
    def proteins(s: String): Seq[String] =
-      val codons = s.grouped(3).toSeq
-
       @tailrec
       def loop(cs: Seq[String], proteins: Seq[String]): Seq[String] =
          cs match
@@ -22,4 +20,4 @@ object ProteinTranslation:
             case ::(head, tail)                                         =>
                loop(tail, proteins.prepended(pMap.find(_._1.contains(head)).map(_._2).getOrElse("")))
 
-      loop(codons, Nil)
+      loop(s.grouped(3).toSeq, Nil)
